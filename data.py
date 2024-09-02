@@ -1,5 +1,6 @@
 import sqlalchemy
 from sqlalchemy import create_engine, text
+import sqlite3
 
 QUERY_FLIGHT_BY_ID = """
 SELECT flights.*, airlines.AIRLINE as airline, flights.ID as FLIGHT_ID, flights.DEPARTURE_DELAY as DELAY
@@ -16,10 +17,10 @@ WHERE flights.origin_airport = :airport AND flights.departure_delay >= 20
 """
 
 QUERY_FLIGHTS_BY_DATE = """
-SELECT flights.*, airlines.name as airline, flights.id as FLIGHT_ID, flights.departure_delay as DELAY
+SELECT flights.*, airlines.AIRLINE as airline, flights.ID as FLIGHT_ID, flights.DEPARTURE_DELAY as DELAY
 FROM flights
-JOIN airlines ON flights.airline_id = airlines.id
-WHERE flights.departure_date = :date
+JOIN airlines ON flights.AIRLINE = airlines.ID
+WHERE flights.YEAR = :year AND flights.MONTH = :month AND flights.DAY = :day
 """
 
 QUERY_DELAYED_FLIGHTS_BY_AIRLINE = """
@@ -75,8 +76,7 @@ class FlightData:
         """
         Searches for flights by date.
         """
-        date = f"{year}-{month:02d}-{day:02d}"
-        params = {'date': date}
+        params = {'day': day, 'month': month, 'year': year}
         return self._execute_query(QUERY_FLIGHTS_BY_DATE, params)
 
     def get_delayed_flights_by_airline(self, airline):
