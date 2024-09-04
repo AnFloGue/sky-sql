@@ -12,7 +12,7 @@ QUERY_DELAYED_FLIGHTS_BY_AIRPORT = """
 SELECT flights.*, airlines.AIRLINE as airline, flights.ID as FLIGHT_ID, flights.DEPARTURE_DELAY as DELAY
 FROM flights
 JOIN airlines ON flights.AIRLINE = airlines.ID
-WHERE flights.ORIGIN_AIRPORT = :airport AND flights.DEPARTURE_DELAY >= 20
+WHERE flights.ORIGIN_AIRPORT = :airport AND flights.DEPARTURE_DELAY >= 20 AND flights.DEPARTURE_DELAY IS NOT NULL
 """
 
 QUERY_FLIGHTS_BY_DATE = """
@@ -26,8 +26,10 @@ QUERY_DELAYED_FLIGHTS_BY_AIRLINE = """
 SELECT flights.*, airlines.AIRLINE as airline, flights.ID as FLIGHT_ID, flights.DEPARTURE_DELAY as DELAY
 FROM flights
 JOIN airlines ON flights.AIRLINE = airlines.ID
-WHERE airlines.AIRLINE = :airline AND flights.DEPARTURE_DELAY >= 20
+WHERE airlines.AIRLINE = :airline AND flights.DEPARTURE_DELAY >= 20 AND flights.DEPARTURE_DELAY IS NOT NULL
 """
+
+
 
 class FlightData:
     def __init__(self, db_uri):
