@@ -51,6 +51,8 @@ def print_results(results):
     for result in results:
         try:
             delay = int(result['DELAY']) if result['DELAY'] else 0
+            if delay <= 0:
+                continue  # Skip flights with no delay
             origin = result['ORIGIN_AIRPORT']
             dest = result['DESTINATION_AIRPORT']
             airline = result['airline']  # Corrected field for airline name
@@ -58,11 +60,8 @@ def print_results(results):
         except (ValueError, KeyError) as e:
             print("Error showing results: ", e)
             return
-    
-        if delay and delay > 0:
-            print(f"{flight_id}. {origin} -> {dest} by {airline}, Delay: {delay} Minutes")
-        else:
-            print(f"{flight_id}. {origin} -> {dest} by {airline}")
+
+        print(f"{flight_id}. {origin} -> {dest} by {airline}, Delay: {delay} Minutes")
 
 def custom_exit(data_manager):
     print("Goodbye, thanks for visiting!")
